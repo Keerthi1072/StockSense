@@ -1,12 +1,14 @@
 import streamlit as st
+from config import APP_TITLE, APP_DESCRIPTION
 
 st.set_page_config(
-    page_title="StockSense",
+    page_title=APP_TITLE,
     page_icon="📈",
     layout="wide"
 )
 
-st.title("📈 StockSense")
+st.title(APP_TITLE)
+st.write(APP_DESCRIPTION)
 
 st.markdown(
     """
