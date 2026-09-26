@@ -1,5 +1,6 @@
 import streamlit as st
 from config import APP_TITLE, APP_DESCRIPTION
+from market_data import get_stock_data
 
 st.set_page_config(
     page_title=APP_TITLE,
@@ -24,6 +25,37 @@ st.markdown(
 st.divider()
 
 st.subheader("Project Modules")
+
+st.divider()
+
+st.subheader("📊 Market Data")
+
+ticker = st.text_input(
+    "Enter Stock Symbol",
+    value="AAPL"
+).upper()
+
+period = st.selectbox(
+    "Select Period",
+    ["1mo", "3mo", "6mo", "1y", "2y", "5y"]
+)
+
+if st.button("Load Market Data"):
+    with st.spinner("Fetching market data..."):
+        data = get_stock_data(ticker, period)
+
+    if data.empty:
+        st.error("No market data found. Please check the stock symbol.")
+    else:
+        st.success(f"Market data loaded for {ticker}")
+
+        st.subheader(f"{ticker} Historical Data")
+        st.dataframe(data, use_container_width=True)
+
+        st.subheader(f"{ticker} Closing Price")
+
+        if "Close" in data.columns:
+            st.line_chart(data["Close"])
 
 col1, col2, col3 = st.columns(3)
 
